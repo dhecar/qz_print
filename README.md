@@ -1,2 +1,3 @@
 # qz_print
-Adaptation to integrate qz-print with openerp 7
+Adaptation to integrate qz-print (https://qz.io/) with openerp 7
+
