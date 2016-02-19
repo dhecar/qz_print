@@ -27,13 +27,11 @@
     "description": """
     Adaptation to print labels with qz-print
     """,
-    "author": 'David Hernández',
+    "author": "David Hernández",
     "depends": ['product', 'base_report_to_printer'],
-    "init_xml": [],
     "js": ['static/src/js/3rdparty/*.js', 'static/src/js/qz-websocket.js'],
     "update_xml": ['views/qz_print_config_view.xml'],
-    "test": [],
-    "active": True,
+    "data": [],
     "installable": True,
     "auto_install": False,
 }
