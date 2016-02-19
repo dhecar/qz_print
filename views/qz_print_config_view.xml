@@ -2,9 +2,54 @@
 <openerp>
   <data>
 
-    <menuitem name="Qz Print Config" id="qz_printing_main" parent="base_report_to_printer.menu_printing_main" groups="base_report_to_printer.res_groups_printingprintoperator0"/>
+        <record id="qz_print_window_form" model="ir.ui.view">
+            <field name="name">qz.config.form</field>
+            <field name="model">qz.config</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                    <form string="Print/Labels configuration">
+                        <field name="printer" colspan="4" select="1" />
+		                <field name="text_field"  colspan="4" select="1"/>
+		                <field name="barcode_field" colspan="4" select="1"/>
+
+                    </form>
+            </field>
+
+        </record>
 
 
+
+        <record id="qz_print_window_tree" model="ir.ui.view">
+            <field name="name">qz.config.tree</field>
+            <field name="model">qz.config</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                    <tree string="Print/Labels configuration">
+                        <field name="printer" />
+		                <field name="text_field" />
+		                <field name="barcode_field"/>
+
+                    </tree>
+            </field>
+
+        </record>
+
+
+
+      <record model="ir.actions.act_window" id="action_qz">
+            <field name="name">Qz Print Config</field>
+	        <field name="res_model">qz.config</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+
+        </record>
+
+
+      <menuitem name= "Qz Print Config"
+                id="qz_printing_main"
+                parent="base_report_to_printer.menu_printing_main"
+                action="action_qz"
+                sequence="10"/>
 
 
   </data>

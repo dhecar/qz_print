@@ -29,7 +29,7 @@
     """,
     "author": "David Hernández",
     "depends": ['product', 'base_report_to_printer'],
-    "js": ['static/src/js/3rdparty/*.js', 'static/src/js/qz-websocket.js'],
+    "js": ['static/src/js/qz-websocket.js'],
     "update_xml": ['views/qz_print_config_view.xml'],
     "data": [],
     "installable": True,
