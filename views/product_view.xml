@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!--TREE VIEW-->
+        <record model="ir.ui.view" id="qz_print_tree_view">
+            <field name="name">qz.print.tree.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_product_tree_view" />
+	        <field name="type">tree</field>
+	            <field name="arch" type="xml">
+	                <field name="default_code" position="before">
+			            <button name="%(qz_print_open)d" icon="STOCK_INFO" string="stock" type="action"/>
+		        </field>
+            </field>
+
+        </record>
+
+        <!--KANBAN VIEW-->
+
+        <record model="ir.ui.view" id="qz_print_kanban_view">
+	    <field name="name">qz.print.kanban.inherit.view</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_kanban_view"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//div[@name='tags']" position="before">
+        	        <button name="%(qz_print_open)d" icon="STOCK_INFO" string="stock" type="action"/>
+		        </xpath>
+
+		</field>
+        </record>
+
+
+        <!--ACT WINDOW-->
+
+        <!--ACCION DE VENTANA -->
+        <act_window
+        context="{}"
+	    domain="[('usage', '=', 'internal')]"
+	    id="qz_print_open"
+            name="Qz Print"
+            res_model="stock.location"
+            src_model="product.product"
+	    target="new" />
+
+
+
+    </data>
+ </openerp>

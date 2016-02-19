@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<openerp>
+  <data>
+
+    <menuitem name="Qz Print Config" id="qz_printing_main" parent="base_report_to_printer.menu_printing_main" groups="res_groups_printingprintoperator0"/>
+
+
+
+
+  </data>
+</openerp>

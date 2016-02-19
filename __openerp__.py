@@ -27,13 +27,15 @@
     "description": """
     Adaptation to print labels with qz-print
     """,
-    'author': 'David Hernández',
-    'depends': ['product'],
-    'init_xml': [],
-    'update_xml': [],
-    'test': [],
-    'installable': True,
-    'auto_install': False,
+    "author": 'David Hernández',
+    "depends": ['product', 'base_report_to_printer'],
+    "init_xml": [],
+    "js": ['static/src/js/3rdparty/*.js', 'static/src/js/qz-websocket.js'],
+    "update_xml": ['views/qz_print_config_view.xml'],
+    "test": [],
+    "active": True,
+    "installable": True,
+    "auto_install": False,
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
