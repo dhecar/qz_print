@@ -9,7 +9,7 @@
 	        <field name="type">tree</field>
 	            <field name="arch" type="xml">
 	                <field name="default_code" position="before">
-			            <button name="%(qz_print_open)d" icon="STOCK_INFO" string="stock" type="action"/>
+			            <button name="%(action_qz_print)d" icon="STOCK_INFO" string="stock" type="action"/>
 		        </field>
             </field>
 
@@ -24,24 +24,33 @@
             <field name="arch" type="xml">
 
                 <xpath expr="//div[@name='tags']" position="before">
-        	        <button name="%(qz_print_open)d" icon="STOCK_INFO" string="stock" type="action"/>
+        	        <button name="%(action_qz_print)d" icon="STOCK_INFO" string="stock" type="action"/>
 		        </xpath>
 
 		</field>
         </record>
 
 
+        <record model="ir.ui.view" id="qz_print_form_act_view">
+            <field name="name">qz.print.form.view</field>
+            <field name="model">qz.print</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <field name="copies" />
+            </field>
+        </record>
+
+
         <!--ACT WINDOW-->
 
-        <!--ACCION DE VENTANA -->
-        <act_window
-        context="{}"
-	    domain="[('usage', '=', 'internal')]"
-	    id="qz_print_open"
-            name="Qz Print"
-            res_model="stock.location"
-            src_model="product.product"
-	    target="new" />
+        <record model="ir.actions.act_window" id="action_qz_print">
+            <field name="name">Qz Print Label</field>
+	        <field name="res_model">qz.print</field>
+            <field name="src_model">product.product</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+
+        </record>
 
 
 

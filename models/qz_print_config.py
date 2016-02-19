@@ -15,3 +15,5 @@ class QzConfig(osv.osv):
 
 
     }
+
+QzConfig()

@@ -49,6 +49,7 @@
                 id="qz_printing_main"
                 parent="base_report_to_printer.menu_printing_main"
                 action="action_qz"
+                groups="base_report_to_printer.res_groups_printingprintoperator0"
                 sequence="10"/>
 
 
