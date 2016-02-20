@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+
+        <!--ACT WINDOW-->
+
+        <record model="ir.actions.act_window" id="action_qz_print">
+            <field name="name">Qz Print Label</field>
+	        <field name="res_model">qz.print</field>
+            <field name="src_model">product.product</field>
+            <field name="view_type">form</field>
+	        <field name="view_mode">form</field>
+            <field name="target">new</field>
+
+        </record>
+
+
         <!--TREE VIEW-->
         <record model="ir.ui.view" id="qz_print_tree_view">
             <field name="name">qz.print.tree.inherit</field>
@@ -8,10 +22,10 @@
             <field name="inherit_id" ref="product.product_product_tree_view" />
 	        <field name="type">tree</field>
 	            <field name="arch" type="xml">
-	                <field name="default_code" position="before">
-			            <button name="%(action_qz_print)d" icon="STOCK_INFO" string="stock" type="action"/>
-		        </field>
-            </field>
+                    <field name="default_code" position="before">
+			            <button name="%(action_qz_print)d" icon="STOCK_PRINT" string="label_print" type="action"/>
+		            </field>
+                </field>
 
         </record>
 
@@ -22,15 +36,14 @@
             <field name="model">product.product</field>
             <field name="inherit_id" ref="product.product_kanban_view"/>
             <field name="arch" type="xml">
-
                 <xpath expr="//div[@name='tags']" position="before">
-        	        <button name="%(action_qz_print)d" icon="STOCK_INFO" string="stock" type="action"/>
+        	        <button name="%(action_qz_print)d" icon="STOCK_PRINT" string="label_print" type="action"/>
 		        </xpath>
 
 		</field>
         </record>
 
-
+        <!--FORM VIEW-->
         <record model="ir.ui.view" id="qz_print_form_act_view">
             <field name="name">qz.print.form.view</field>
             <field name="model">qz.print</field>
@@ -40,19 +53,5 @@
             </field>
         </record>
 
-
-        <!--ACT WINDOW-->
-
-        <record model="ir.actions.act_window" id="action_qz_print">
-            <field name="name">Qz Print Label</field>
-	        <field name="res_model">qz.print</field>
-            <field name="src_model">product.product</field>
-	        <field name="view_type">form</field>
-	        <field name="view_mode">tree,form</field>
-
-        </record>
-
-
-
     </data>
- </openerp>
+</openerp>

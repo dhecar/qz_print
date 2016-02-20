@@ -8,9 +8,44 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                     <form string="Print/Labels configuration">
-                        <field name="printer" colspan="4" select="1" />
-		                <field name="text_field"  colspan="4" select="1"/>
-		                <field name="barcode_field" colspan="4" select="1"/>
+                        <field name="qz_printer" colspan="4"/>
+                        <field name="qz_paper_size"/>
+		                <field name="qz_model_id" on_change="onchange_model(qz_model_id)"/>
+                        <field name="qz_model_list" invisible="1"/>
+                        <notebook colspan="4">
+                        <page string="Fields">
+                            <field name="qz_field_ids" colspan="4" nolabel="1">
+                                <form string="Fields">
+                                    <group colspan="4" col="6">
+                                        <field name="qz_field_id"  domain="[('ttype', 'not in', ['one2many', 'refenrence', 'function']), ('model_id', '=', parent.qz_model_id)]"/>
+                                        <field name="qz_field_type"/>
+                                        <field name="h_start_p1" />
+                                        <field name="v_start_p2" />
+                                        <field name="rotation_p3" />
+                                        <field name="font_p4" />
+                                        <field name="h_multiplier_p5" attrs="{'invisible': [('qz_field_type', '=', 'barcode')]}"/>
+                                        <field name="v_multiplier_p6" attrs="{'invisible': [('qz_field_type', '=', 'barcode')]}"/>
+                                        <field name="n_r_p7" attrs="{'invisible': [('qz_field_type', '=', 'barcode')]}"/>
+                                        <field name="bar_sel_p4" attrs="{'invisible': [('qz_field_type', '=', 'text')]}"/>
+                                        <field name="n_bar_w_p5" attrs="{'invisible': [('qz_field_type', '=', 'text')]}"/>
+                                        <field name="w_bar_w_p6" attrs="{'invisible': [('qz_field_type', '=', 'text')]}"/>
+                                        <field name="bar_height_p7" attrs="{'invisible': [('qz_field_type', '=', 'text')]}"/>
+                                        <field name="human_read_p8" attrs="{'invisible': [('qz_field_type', '=', 'text')]}"/>
+                                    </group>
+                                </form>
+                                <tree string="Fields">
+                                    <field name="qz_field_id" domain="[('ttype', 'not in', ['one2many', 'refenrence', 'function']), ('model_id', 'in', eval(parent.qz_model_list))]"/>
+                                    <field name="qz_field_type"/>
+                                    <field name="bar_sel_p4" attrs="{'invisible': [('qz_field_type', '=', 'text')]}"/>
+                                    <field name="h_start_p1" />
+                                    <field name="v_start_p2" />
+                                    <field name="rotation_p3" />
+                                    <field name="font_p4" />
+                                    <field name="n_r_p7" attrs="{'invisible': [('qz_field_type', '=', 'barcode')]}"/>
+                                </tree>
+                            </field>
+                        </page>
+                        </notebook>
 
                     </form>
             </field>
@@ -25,13 +60,10 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                     <tree string="Print/Labels configuration">
-                        <field name="printer" />
-		                <field name="text_field" />
-		                <field name="barcode_field"/>
-
-                    </tree>
+                        <field name="qz_printer" />
+		                <field name="qz_paper_size" />
+		            </tree>
             </field>
-
         </record>
 
 
@@ -46,11 +78,11 @@
 
 
       <menuitem name= "Qz Print Config"
-                id="qz_printing_main"
-                parent="base_report_to_printer.menu_printing_main"
-                action="action_qz"
-                groups="base_report_to_printer.res_groups_printingprintoperator0"
-                sequence="10"/>
+                id = "qz_printing_main"
+                parent = "base_report_to_printer.menu_printing_main"
+                action = "action_qz"
+                groups = "base_report_to_printer.res_groups_printingprintoperator0"
+                sequence = "10"/>
 
 
   </data>
