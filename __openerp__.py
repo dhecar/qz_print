@@ -25,7 +25,8 @@
     "category" : "Tools",
     "website" : "http://sinergiainformatica.net",
     "description": """
-    Adaptation to print labels with qz-print
+    Adaptation to print to EPL printer with openerp 7.
+    Need zebra python package https://pypi.python.org/pypi/zebra/
     """,
     "author": "David Hernández",
     "depends": ['product', 'base_report_to_printer', 'web'],

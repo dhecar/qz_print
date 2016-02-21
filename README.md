@@ -1,3 +1,3 @@
 # qz_print
-Adaptation to print top EPL printer with openerp 7
+Adaptation to print to EPL printer with openerp 7
 
