@@ -11,4 +11,12 @@ class QzPrint(osv.osv):
         'copies': fields.char('Num of Copy:', size=4),
     }
 
+
+    #def get_spool(self, cr, uid, context=None):
+    #def get_selection(self, rows, columns, ids, model):
+
+
+    #def prepare_epl_data(self, cr, uid, context=None)
+    #def send_epl_data(self, cr, uid, context=None)
+
 QzPrint()

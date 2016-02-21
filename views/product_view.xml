@@ -49,9 +49,18 @@
             <field name="model">qz.print</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
+                <form string="Label Printer" version="7.0">
                 <field name="copies" />
+
+                    <footer>
+                        <button string="Print" name="send_epl_data" type="object" icon="STOCK_PRINT"/>
+                        o
+                        <button string="Cancelar" special="cancel" class="oe_link" />
+                    </footer>
+                </form>
             </field>
         </record>
+
 
     </data>
 </openerp>

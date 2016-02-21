@@ -9,7 +9,7 @@ class QzConfig(osv.osv):
     _description = 'Qz Print configuration'
 
     _columns = {
-        'qz_printer': fields.char('Printer', size=100),
+        'qz_printer': fields.many2one('printing.printer', 'Printer',  required=True, select=1),
         'qz_paper_size': fields.selection([('25x55', '25x55')], 'Paper Size'),
         'qz_model_id': fields.many2one('ir.model', 'Model', required=True, select=1),
         'qz_field_ids': fields.one2many("qz.fields", 'qz_field_id', 'Fields'),

@@ -67,7 +67,6 @@
         </record>
 
 
-
       <record model="ir.actions.act_window" id="action_qz">
             <field name="name">Qz Print Config</field>
 	        <field name="res_model">qz.config</field>
