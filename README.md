@@ -1,3 +1,3 @@
 # qz_print
-Adaptation to integrate qz-print (https://qz.io/) with openerp 7
+Adaptation to print top EPL printer with openerp 7
 
