@@ -45,7 +45,7 @@ class QzFields(osv.osv):
 
     _columns = {
         'sequence': fields.integer("Sequence", required=True),
-        'qz_field_id': fields.many2one('ir.model.fields', 'Fields', required=False),
+        'qz_field_id': fields.many2one('ir.model.fields', 'Fields', required=True),
         'qz_field_type': fields.selection([('barcode', 'Barcode'), ('text', 'Text')], 'Type'),
         'h_start_p1': fields.integer('Horizontal Start (dots)'),
         'v_start_p2': fields.integer('Vertical Start (dots)'),
