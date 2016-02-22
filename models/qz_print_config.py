@@ -47,8 +47,8 @@ class QzFields(osv.osv):
         'sequence': fields.integer("Sequence", required=True),
         'qz_field_id': fields.many2one('ir.model.fields', 'Fields', required=False),
         'qz_field_type': fields.selection([('barcode', 'Barcode'), ('text', 'Text')], 'Type'),
-        'h_start_p1': fields.float('Horizontal Start (dots)'),
-        'v_start_p2': fields.float('Vertical Start (dots)'),
+        'h_start_p1': fields.integer('Horizontal Start (dots)'),
+        'v_start_p2': fields.integer('Vertical Start (dots)'),
         'rotation_p3': fields.selection([('0', 'No rotation'), ('1', '90 degrees'), ('2', '180 degrees'),
                                          ('3', '270 degrees')], 'Rotation'),
         'font_p4': fields.selection([('1', '203 dpi(8 x 12 dots) or 300 dpi(12 x 20 dots)'),
@@ -94,9 +94,9 @@ class QzFields(osv.osv):
                                         ('2U', 'UPC Interleaved 2 of 5'),
                                         ('L', 'Plessey (MSI-1) with mod. 10 check digit'),
                                         ('M', 'MSI-3 with mod. 10 check digit')], 'Barcode Type'),
-        'n_bar_w_p5': fields.float('Narrow Bar width in dots'),
-        'w_bar_w_p6': fields.float('Wide bar width in dots'),
-        'bar_height_p7': fields.float('Barcode Height in dots'),
+        'n_bar_w_p5': fields.integer('Narrow Bar width in dots'),
+        'w_bar_w_p6': fields.integer('Wide bar width in dots'),
+        'bar_height_p7': fields.integer('Barcode Height in dots'),
         'human_read_p8': fields.selection([('B', 'Yes'), ('N', 'No')], 'Human Readable'),
 
     }
