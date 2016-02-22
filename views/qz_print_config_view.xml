@@ -9,7 +9,10 @@
             <field name="arch" type="xml">
                     <form string="Print/Labels configuration">
                         <field name="qz_printer" colspan="4"/>
-                        <field name="qz_paper_size"/>
+                        <field name="qz_default" />
+                        <field name="qz_label_height"/>
+                        <field name="qz_label_gap" />
+                        <field name="qz_label_width" />
 		                <field name="qz_model_id" on_change="onchange_model(qz_model_id)"/>
                         <field name="qz_model_list" invisible="1"/>
                         <notebook colspan="4">
@@ -17,6 +20,7 @@
                             <field name="qz_field_ids" colspan="4" nolabel="1">
                                 <form string="Fields">
                                     <group colspan="4" col="6">
+                                        <field name="sequence" />
                                         <field name="qz_field_id"  domain="[('ttype', 'not in', ['one2many', 'refenrence', 'function']), ('model_id', '=', parent.qz_model_id)]"/>
                                         <field name="qz_field_type"/>
                                         <field name="h_start_p1" />
@@ -61,8 +65,10 @@
             <field name="arch" type="xml">
                     <tree string="Print/Labels configuration">
                         <field name="qz_printer" />
-		                <field name="qz_paper_size" />
-		            </tree>
+		                <field name="qz_label_height" />
+                        <field name="qz_label_gap" />
+                        <field name="qz_label_width" />
+                    </tree>
             </field>
         </record>
 

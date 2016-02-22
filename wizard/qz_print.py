@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from osv import fields, osv
-
+from zebra import zebra
+import re
 
 class QzPrint(osv.osv):
 
@@ -8,15 +9,77 @@ class QzPrint(osv.osv):
     _description = 'Qz Print Labels'
 
     _columns = {
-        'copies': fields.char('Num of Copy:', size=4),
+        'copies': fields.integer('Num of Copy:', required=True),
     }
 
+    _defaults = {
 
-    #def get_spool(self, cr, uid, context=None):
-    #def get_selection(self, rows, columns, ids, model):
+        'copies': 1,
+    }
 
+    # Get default queue name
+    def get_queue(self, cr, uid, field_names=None, arg=None, context=None):
+        result = {}
+        pool_obj = self.pool.get('qz.config')
+        pool_ids = pool_obj.search(cr, uid,  [('qz_default', '=', 1)])
+        if pool_ids:
+            for i in pool_obj.browse(cr, uid, pool_ids, context=context):
+                result = i.qz_printer.system_name
+            return result
 
-    #def prepare_epl_data(self, cr, uid, context=None)
-    #def send_epl_data(self, cr, uid, context=None)
+    # Prepare EPL data (escaped)
+
+    def prepare_epl_data(self, cr, uid, field_names=None, arg=None, context=None):
+        result = {}
+        pool_obj = self.pool.get('qz.config')
+        pool_ids = pool_obj.search(cr, uid,  [('qz_default', '=', 1)])
+        if pool_ids:
+            for i in pool_obj.browse(cr, uid, pool_ids, context=context):
+                for fields in i.qz_field_ids:
+
+                    if fields.qz_field_type == 'barcode':
+                        data = {}
+                        data += ('B' + fields.h_start_p1 + ',' +
+                                 fields.v_start_p2 + ',' +
+                                 fields.rotation_p3 + ',' +
+                                 fields.bar_sel_p4 + ',' +
+                                 fields.n_bar_w_p5 + ',' +
+                                 fields.w_bar_w_p6 + ',' +
+                                 fields.bar_height_p7 + ',' +
+                                 fields.qz_field_id.internal_reference + '\n')
+
+                    else:
+                        data2 = {}
+                        data2 += ("A" + fields.h_start_p1 + ',' +
+                                  fields.v_start_p2 + ',' +
+                                  fields.rotation_p3 + ',' +
+                                  fields.font_p4 + ',' +
+                                  fields.h_multiplier_p5 + ',' +
+                                  fields.v_multiplier_p6 + ',' +
+                                  fields.n_r_p7 + ',' +
+                                  fields.qz_field_id.internal_reference + '\n')
+                    result = data + data2
+                    print result
+                    return result
+
+    # Print EPL data
+    def send_epl_data(self, cr, uid, ids, copies,  context=None):
+        z = zebra()
+
+        queue = self.get_queue(cr, uid, context=context)
+        z.setqueue(queue)
+        conf_obj = self.pool.get('qz.config')
+        conf_id = conf_obj.search(cr, uid,  [('qz_default', '=', 1)])
+        if conf_id:
+            for x in conf_obj.browse(cr, uid, conf_id):
+                thermal = x.qz_direct_thermal
+                h = x.qz_label_height
+                gap = x.qz_label_gap
+                height = [h, gap]
+                width = x.qz_label_width
+        z.setup(direct_thermal=thermal, label_height=height, label_width=width)
+        commands = self.prepare_epl_data(self, cr, uid, context=context)
+        z.output(commands)
+
 
 QzPrint()

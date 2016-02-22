@@ -10,7 +10,11 @@ class QzConfig(osv.osv):
 
     _columns = {
         'qz_printer': fields.many2one('printing.printer', 'Printer',  required=True, select=1),
-        'qz_paper_size': fields.selection([('25x55', '25x55')], 'Paper Size'),
+        'qz_direct_thermal': fields.boolean('Direct Thermal'),
+        'qz_label_height':fields.integer('Label Height in dots'),
+        'qz_label_gap': fields.integer('Label gap size in dots'),
+        'qz_label_width': fields.integer('Label width in dots'),
+        'qz_default': fields.boolean('Default?'),
         'qz_model_id': fields.many2one('ir.model', 'Model', required=True, select=1),
         'qz_field_ids': fields.one2many("qz.fields", 'qz_field_id', 'Fields'),
         'qz_model_list': fields.char('Model List', size=256)
@@ -40,7 +44,7 @@ class QzFields(osv.osv):
     _rec_name = "qz_field_id"
 
     _columns = {
-        # 'sequence': fields.integer("Sequence", required=True),
+        'sequence': fields.integer("Sequence", required=True),
         'qz_field_id': fields.many2one('ir.model.fields', 'Fields', required=False),
         'qz_field_type': fields.selection([('barcode', 'Barcode'), ('text', 'Text')], 'Type'),
         'h_start_p1': fields.float('Horizontal Start (dots)'),
