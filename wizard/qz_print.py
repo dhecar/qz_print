@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from osv import fields, osv
 from zebra import zebra
-
-
+from time import sleep
 
 class QzPrint(osv.osv):
     _name = 'qz.print'
@@ -29,17 +28,18 @@ class QzPrint(osv.osv):
 
     # Prepare EPL data (escaped)
 
-    def prepare_epl_data(self, cr, uid, field_names=None, arg=None, context=None):
+    def prepare_epl_data(self, cr, uid, ids, active_ids, field_names=None, arg=None, context=None):
+
         pool_obj = self.pool.get('qz.config')
         pool_ids = pool_obj.search(cr, uid, [('qz_default', '=', 1)])
-
         if pool_ids:
             for i in pool_obj.browse(cr, uid, pool_ids, context=context):
                 for fields in i.qz_field_ids:
 
-                    # Format: Bp1,p2,p3,p4,p5,p6,p7,p8,"DATA"\n
+                        # Format: Bp1,p2,p3,p4,p5,p6,p7,p8,"DATA"\n
 
                     if fields.qz_field_type == 'barcode':
+
                         data = []
                         data += {'B' + str(fields.h_start_p1) + ',' +
                                  str(fields.v_start_p2) + ',' +
@@ -48,11 +48,13 @@ class QzPrint(osv.osv):
                                  str(fields.n_bar_w_p5) + ',' +
                                  str(fields.w_bar_w_p6) + ',' +
                                  str(fields.bar_height_p7) + ',' +
-                                 str(fields.human_read_p8) + ',' + '"DATA'}
-                                 #str(active_ids.internal_reference) + '"' + '\n'}
+                                 str(fields.human_read_p8) + ',' + '"DATA"' + '\n'}
+                                 #str(active_id.internal_reference) + '"' + '\n'}
 
-                    # text field Format: Ap1,p2,p3,p4,p5,p6,p7,"DATA"\n
+                        # text field Format: Ap1,p2,p3,p4,p5,p6,p7,"DATA"\n
+
                     else:
+
                         data2 = []
                         data2 += {'A' + str(fields.h_start_p1) + ',' +
                                   str(fields.v_start_p2) + ',' +
@@ -60,8 +62,8 @@ class QzPrint(osv.osv):
                                   str(fields.font_p4) + ',' +
                                   str(fields.h_multiplier_p5) + ',' +
                                   str(fields.v_multiplier_p6) + ',' +
-                                  str(fields.n_r_p7) + ',' + '"DATA"'}
-                                  #str(fields.qz_field_id.internal_reference) + '"' + '\n')
+                                  str(fields.n_r_p7) + ',' + '"DATA"' + '\n'}
+                                  #str(active_id.name_template) + '"' + '\n'}
 
                 """
                     Example of ELP commands to send
@@ -73,13 +75,14 @@ class QzPrint(osv.osv):
                     P1
                  """
 
-                result = '"""' + '\n' + 'N\n' + ''.join(data) + '\n' + ''.join(data2) + '\n' + 'P1\n' + '"""'
+                result = '"""\n' + 'N\n' + ''.join(data) + '\n' + ''.join(data2) + '\n' + 'P1\n"""'
 
                 return result
 
     # Print EPL data
 
-    def send_epl_data(self, cr, uid, ids, copies, context=None):
+    def send_epl_data(self, cr, uid, ids, active_ids, context=None):
+
         z = zebra()
         queue = self.get_queue(cr, uid, context=context)
         z.setqueue(queue)
@@ -93,9 +96,11 @@ class QzPrint(osv.osv):
                 height = [h, gap]
                 width = x.qz_label_width
         z.setup(direct_thermal=thermal, label_height=height, label_width=width)
-        epl = self.prepare_epl_data(cr, uid, context=context)
-        print epl
+        epl = self.prepare_epl_data(cr, uid, ids, active_ids, context=context)
+        # copies
+        # TODO GET NUM OF COPIES to
         z.output(epl)
-
+        ## sleep 0.9 sec between labels, if not, printer die ;)
+        sleep(0.9)
 
 QzPrint()

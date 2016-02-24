@@ -8,20 +8,21 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                     <form string="Print/Labels configuration">
-                        <field name="qz_printer" colspan="4"/>
+                        <field name="name" />
+                        <field name="qz_printer"/>
                         <field name="qz_default" />
                         <field name="qz_label_height"/>
                         <field name="qz_label_gap" />
                         <field name="qz_label_width" />
-		                <field name="qz_model_id" on_change="onchange_model(qz_model_id)"/>
-                        <field name="qz_model_list" invisible="1"/>
+		                <field name="model_id" on_change="onchange_model(model_id)"/>
+                        <field name="model_list" invisible="1"/>
                         <notebook colspan="4">
                         <page string="Fields">
                             <field name="qz_field_ids" colspan="4" nolabel="1">
                                 <form string="Fields">
                                     <group colspan="4" col="6">
                                         <field name="sequence" />
-                                        <field name="qz_field_id"  domain="[('ttype', 'not in', ['one2many', 'refenrence', 'function']), ('model_id', '=', parent.qz_model_id)]"/>
+                                        <field name="qz_field_id"  domain="[('ttype', 'not in', ['one2many', 'refenrence', 'function']), ('model_id', '=', parent.model_id)]"/>
                                         <field name="qz_field_type"/>
                                         <field name="h_start_p1" />
                                         <field name="v_start_p2" />
@@ -38,7 +39,8 @@
                                     </group>
                                 </form>
                                 <tree string="Fields">
-                                    <field name="qz_field_id" domain="[('ttype', 'not in', ['one2many', 'refenrence', 'function']), ('model_id', 'in', eval(parent.qz_model_list))]"/>
+                                    <field name="sequence" />
+                                    <field name="qz_field_id" domain="[('ttype', 'not in', ['one2many', 'refenrence', 'function']), ('model_id', '=', eval(parent.model_id))]"/>
                                     <field name="qz_field_type"/>
                                     <field name="bar_sel_p4" attrs="{'invisible': [('qz_field_type', '=', 'text')]}"/>
                                     <field name="h_start_p1" />
@@ -48,6 +50,17 @@
                                     <field name="n_r_p7" attrs="{'invisible': [('qz_field_type', '=', 'barcode')]}"/>
                                 </tree>
                             </field>
+                        </page>
+                        <page string="Advance">
+                            <group colspan="2" col="2">
+                                <button name="create_action" string="Add sidebar button" type="object" icon="gtk-execute"
+                                        colspan="2" attrs="{'invisible':[('ref_ir_act_report','!=',False)]}"
+                                        help="Display a button in the sidebar of related documents to open a composition wizard"/>
+                                <field name="ref_ir_act_report" attrs="{'invisible':[('ref_ir_act_report','=',False)]}"/>
+                                <field name="ref_ir_value" attrs="{'invisible':[('ref_ir_act_report','=',False)]}"/>
+                                <button name="unlink_action" string="Remove sidebar button" type="object" icon="gtk-delete"
+                                         attrs="{'invisible':[('ref_ir_act_report','=',False)]}" colspan="2" />
+                            </group>
                         </page>
                         </notebook>
 
@@ -78,7 +91,6 @@
 	        <field name="res_model">qz.config</field>
 	        <field name="view_type">form</field>
 	        <field name="view_mode">tree,form</field>
-
         </record>
 
 

@@ -11,6 +11,9 @@
             <field name="view_type">form</field>
 	        <field name="view_mode">form</field>
             <field name="target">new</field>
+            <field name="multi">True</field>
+            <field name="key2">client_action_multi</field>
+            <field name="context">{'active_ids': context.get('active_ids', [])}</field>
 
         </record>
 

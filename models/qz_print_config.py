@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from osv import fields, osv
+from tools.translate import _
 
 
 class QzConfig(osv.osv):
@@ -9,23 +10,29 @@ class QzConfig(osv.osv):
     _description = 'Qz Print configuration'
 
     _columns = {
-        'qz_printer': fields.many2one('printing.printer', 'Printer',  required=True, select=1),
+        'name': fields.char("Action Name", size=64, required=True, select=1),
+        'qz_printer': fields.many2one('printing.printer', 'Printer', required=True, select=1),
         'qz_direct_thermal': fields.boolean('Direct Thermal'),
-        'qz_label_height':fields.integer('Label Height in dots'),
+        'qz_label_height': fields.integer('Label Height in dots'),
         'qz_label_gap': fields.integer('Label gap size in dots'),
         'qz_label_width': fields.integer('Label width in dots'),
         'qz_default': fields.boolean('Default?'),
-        'qz_model_id': fields.many2one('ir.model', 'Model', required=True, select=1),
+        'model_id': fields.many2one('ir.model', 'Model', required=True, select=1),
         'qz_field_ids': fields.one2many("qz.fields", 'qz_field_id', 'Fields'),
-        'qz_model_list': fields.char('Model List', size=256)
+        'model_list': fields.char('Model List', size=256),
+        'ref_ir_act_report': fields.many2one('ir.actions.act_window', 'Sidebar action', readonly=True,
+                                             help="Sidebar action to make this template available on records "
+                                                  "of the related document model"),
+        'ref_ir_value': fields.many2one('ir.values', 'Sidebar button', readonly=True,
+                                        help="Sidebar button to open the sidebar action"),
     }
 
-    def onchange_model(self, cr, uid, ids, qz_model_id):
+    def onchange_model(self, cr, uid, ids, model_id):
         model_list = ""
-        if qz_model_id:
+        if model_id:
             model_obj = self.pool.get('ir.model')
-            model_data = model_obj.browse(cr, uid, qz_model_id)
-            model_list = "[" + str(qz_model_id) + ""
+            model_data = model_obj.browse(cr, uid, model_id)
+            model_list = "[" + str(model_id) + ""
             active_model_obj = self.pool.get(model_data.model)
             if active_model_obj._inherits:
                 for key, val in active_model_obj._inherits.items():
@@ -33,7 +40,49 @@ class QzConfig(osv.osv):
                     if model_ids:
                         model_list += "," + str(model_ids[0]) + ""
             model_list += "]"
-        return {'value': {'qz_model_list': model_list}}
+        return {'value': {'model_list': model_list}}
+
+    def create_action(self, cr, uid, ids, context=None):
+        vals = {}
+        action_obj = self.pool.get('ir.actions.act_window')
+        for data in self.browse(cr, uid, ids, context=context):
+            src_obj = data.model_id.model
+            button_name = _('Labels(%s)') % data.name
+            vals['ref_ir_act_report'] = action_obj.create(cr, uid, {
+                'name': button_name,
+                'type': 'ir.actions.act_window',
+                'res_model': 'qz.print',
+                'src_model': src_obj,
+                'view_type': 'form',
+                'context': "{'label_print' : %d}" % (data.id),
+                'view_mode': 'form,tree',
+                'target': 'new',
+            }, context)
+            vals['ref_ir_value'] = self.pool.get('ir.values').create(cr, uid, {
+                'name': button_name,
+                'model': src_obj,
+                'key2': 'client_action_multi',
+                'value': "ir.actions.act_window," + str(vals['ref_ir_act_report']),
+                'object': True,
+            }, context)
+        self.write(cr, uid, ids, {
+            'ref_ir_act_report': vals.get('ref_ir_act_report', False),
+            'ref_ir_value': vals.get('ref_ir_value', False),
+        }, context)
+        return True
+
+    def unlink_action(self, cr, uid, ids, context=None):
+        ir_values_obj = self.pool.get('ir.values')
+        act_window_obj = self.pool.get('ir.actions.act_window')
+        for template in self.browse(cr, uid, ids, context=context):
+            try:
+                if template.ref_ir_act_report:
+                    act_window_obj.unlink(cr, uid, template.ref_ir_act_report.id, context)
+                if template.ref_ir_value:
+                    ir_values_obj.unlink(cr, uid, template.ref_ir_value.id, context)
+            except Exception, e:
+                raise osv.except_osv(_("Warning"), _("Deletion of the action record failed. %s" % (e)))
+        return True
 
 
 QzConfig()
@@ -41,11 +90,11 @@ QzConfig()
 
 class QzFields(osv.osv):
     _name = "qz.fields"
-    _rec_name = "qz_field_id"
+    _rec_name = "sequence"
 
     _columns = {
         'sequence': fields.integer("Sequence", required=True),
-        'qz_field_id': fields.many2one('ir.model.fields', 'Fields', required=True),
+        'qz_field_id': fields.many2one('ir.model.fields', 'Fields', required=True, select=1),
         'qz_field_type': fields.selection([('barcode', 'Barcode'), ('text', 'Text')], 'Type'),
         'h_start_p1': fields.integer('Horizontal Start (dots)'),
         'v_start_p2': fields.integer('Vertical Start (dots)'),
