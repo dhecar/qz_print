@@ -3,6 +3,7 @@ from osv import fields, osv
 from zebra import zebra
 from time import sleep
 
+
 class QzPrint(osv.osv):
     _name = 'qz.print'
     _description = 'Qz Print Labels'
@@ -32,38 +33,47 @@ class QzPrint(osv.osv):
 
         pool_obj = self.pool.get('qz.config')
         pool_ids = pool_obj.search(cr, uid, [('qz_default', '=', 1)])
-        if pool_ids:
-            for i in pool_obj.browse(cr, uid, pool_ids, context=context):
-                for fields in i.qz_field_ids:
+
+        # TODO  Get Active ids NOt working
+        product_obj = self.pool.get('product.template')
+        record_ids = context and context.get('active_ids', []) or []
+
+        for product in product_obj.browse(cr, uid, record_ids, context=context):
+
+            if pool_ids:
+                for i in pool_obj.browse(cr, uid, pool_ids, context=context):
+                    for fields in i.qz_field_ids:
 
                         # Format: Bp1,p2,p3,p4,p5,p6,p7,p8,"DATA"\n
 
-                    if fields.qz_field_type == 'barcode':
+                        if fields.qz_field_type == 'barcode':
 
-                        data = []
-                        data += {'B' + str(fields.h_start_p1) + ',' +
-                                 str(fields.v_start_p2) + ',' +
-                                 str(fields.rotation_p3) + ',' +
-                                 str(fields.bar_sel_p4) + ',' +
-                                 str(fields.n_bar_w_p5) + ',' +
-                                 str(fields.w_bar_w_p6) + ',' +
-                                 str(fields.bar_height_p7) + ',' +
-                                 str(fields.human_read_p8) + ',' + '"DATA"' + '\n'}
-                                 #str(active_id.internal_reference) + '"' + '\n'}
+                            data = []
+                            data += {'B' + str(fields.h_start_p1) + ',' +
+                                     str(fields.v_start_p2) + ',' +
+                                     str(fields.rotation_p3) + ',' +
+                                     str(fields.bar_sel_p4) + ',' +
+                                     str(fields.n_bar_w_p5) + ',' +
+                                     str(fields.w_bar_w_p6) + ',' +
+                                     str(fields.bar_height_p7) + ',' +
+                                     str(fields.human_read_p8) + ',' + '"' +
+                                     str(product.internal_reference) + '"' + '\n'}
+                            # TODO get value to print from qz.config
 
-                        # text field Format: Ap1,p2,p3,p4,p5,p6,p7,"DATA"\n
+                            # text field Format: Ap1,p2,p3,p4,p5,p6,p7,"DATA"\n
 
-                    else:
+                        else:
 
-                        data2 = []
-                        data2 += {'A' + str(fields.h_start_p1) + ',' +
-                                  str(fields.v_start_p2) + ',' +
-                                  str(fields.rotation_p3) + ',' +
-                                  str(fields.font_p4) + ',' +
-                                  str(fields.h_multiplier_p5) + ',' +
-                                  str(fields.v_multiplier_p6) + ',' +
-                                  str(fields.n_r_p7) + ',' + '"DATA"' + '\n'}
-                                  #str(active_id.name_template) + '"' + '\n'}
+                            data2 = []
+                            data2 += {'A' + str(fields.h_start_p1) + ',' +
+                                      str(fields.v_start_p2) + ',' +
+                                      str(fields.rotation_p3) + ',' +
+                                      str(fields.font_p4) + ',' +
+                                      str(fields.h_multiplier_p5) + ',' +
+                                      str(fields.v_multiplier_p6) + ',' +
+                                      str(fields.n_r_p7) + ',' + '"' +
+                                      str(product.name_template) + '"' + '\n'}
+                            # TODO get value to print from qz.config
 
                 """
                     Example of ELP commands to send
@@ -102,5 +112,6 @@ class QzPrint(osv.osv):
         z.output(epl)
         ## sleep 0.9 sec between labels, if not, printer die ;)
         sleep(0.9)
+
 
 QzPrint()
