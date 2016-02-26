@@ -2,6 +2,8 @@
 from osv import fields, osv
 from zebra import zebra
 from time import sleep
+import re
+import codecs
 
 
 class QzPrint(osv.osv):
@@ -27,6 +29,7 @@ class QzPrint(osv.osv):
                 result = i.qz_printer.system_name
             return result
 
+
     # Prepare EPL data (escaped)
 
     def prepare_epl_data(self, cr, uid, ids, context=None):
@@ -41,8 +44,8 @@ class QzPrint(osv.osv):
         for product in product_obj.browse(cr, uid, record_ids, context=context):
             ## Limit size:
 
-            if len(product.name_template) > 75:
-                product.name_template = product.name_template[:75] + '..'
+            if len(product.name_template) > 20:
+                product.name_template = product.name_template[:20] + '..'
             else:
                 product.name_template = product.name_template
 
