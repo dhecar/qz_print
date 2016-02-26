@@ -80,8 +80,8 @@ class QzPrint(osv.osv):
                                       str(fields.font_p4) + ',' +
                                       str(fields.h_multiplier_p5) + ',' +
                                       str(fields.v_multiplier_p6) + ',' +
-                                      str(fields.n_r_p7) + ',' + '"' + 
-                                      str(product.name_template) + '"' + '\n'}
+                                      str(fields.n_r_p7) + ',' + '"' }
+                                      #str(product.name_template).encode('ascii', 'replace') + '"' + '\n'}
                             # TODO get value to print from qz.config
 
                 """
@@ -94,7 +94,7 @@ class QzPrint(osv.osv):
                     P1
                  """
 
-                result = '"""\n' + 'N\n' + ''.join(data) + '\n' + ''.join(data2) + '\n' + 'P1\n"""'
+                result = '"""\n' + 'N\n' + ''.join(data) + '\n' + '\n' + 'P1\n"""'
 
                 return result
 
@@ -120,7 +120,8 @@ class QzPrint(osv.osv):
         for n in range(0, num_cop):
             z.output(epl)
             ## sleep  between labels, if not, printer die ;)
-            sleep(1.2)
+            sleep(1.3)
 
+        return True
 
 QzPrint()
