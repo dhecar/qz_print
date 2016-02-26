@@ -29,10 +29,7 @@
     Need zebra python package https://pypi.python.org/pypi/zebra/
     """,
     "author": "David Hernández",
-    "depends": ['product', 'base_report_to_printer', 'web'],
-    #"js": ['static/src/js/labels.js'],
-    #"css": ['static/src/css/labels.css'],
-    #'qweb': ['static/src/xml/labels.xml'],
+    "depends": ['product', 'base_report_to_printer'],
     "update_xml": ['views/qz_print_config_view.xml', 'views/product_view.xml'],
     "data": [],
     "installable": True,
