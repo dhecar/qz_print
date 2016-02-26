@@ -116,8 +116,8 @@ class QzPrint(osv.osv):
             num_cop = data.copies
         for n in range(0, num_cop):
             z.output(epl)
-            ## sleep 0.9 sec between labels, if not, printer die ;)
-            sleep(0.9)
+            ## sleep  between labels, if not, printer die ;)
+            sleep(1.2)
 
 
 QzPrint()
