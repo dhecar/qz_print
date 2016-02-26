@@ -11,7 +11,7 @@
             <field name="view_type">form</field>
 	        <field name="view_mode">form</field>
             <field name="target">new</field>
-            <field name="context">{'active_ids': 'active_ids', []}</field>
+            <field name="context">{'active_ids': context.get('active_ids', [])}</field>
         </record>
 
 
