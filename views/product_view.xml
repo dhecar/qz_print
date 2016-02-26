@@ -7,14 +7,13 @@
         <record model="ir.actions.act_window" id="action_qz_print">
             <field name="name">Qz Print Label</field>
 	        <field name="res_model">qz.print</field>
+            <field name="res_id">copies</field>
             <field name="src_model">product.product</field>
             <field name="view_type">form</field>
 	        <field name="view_mode">form</field>
             <field name="target">new</field>
-
-
+            <field name="context">{'active_ids': 'active_ids', []}</field>
         </record>
-
 
 
 

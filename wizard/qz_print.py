@@ -29,16 +29,22 @@ class QzPrint(osv.osv):
 
     # Prepare EPL data (escaped)
 
-    def prepare_epl_data(self, cr, uid, ids, active_ids, field_names=None, arg=None, context=None):
+    def prepare_epl_data(self, cr, uid, ids, context=None):
 
         pool_obj = self.pool.get('qz.config')
         pool_ids = pool_obj.search(cr, uid, [('qz_default', '=', 1)])
 
-        # TODO  Get Active ids NOt working
-        product_obj = self.pool.get('product.template')
+        # TODO  Get field to print from qz.config
+        product_obj = self.pool.get('product.product')
         record_ids = context and context.get('active_ids', []) or []
 
         for product in product_obj.browse(cr, uid, record_ids, context=context):
+            ## Limit size:
+
+            if len(product.name_template) > 75:
+                product.name_template = product.name_template[:75] + '..'
+            else:
+                product.name_template = product.name_template
 
             if pool_ids:
                 for i in pool_obj.browse(cr, uid, pool_ids, context=context):
@@ -57,7 +63,7 @@ class QzPrint(osv.osv):
                                      str(fields.w_bar_w_p6) + ',' +
                                      str(fields.bar_height_p7) + ',' +
                                      str(fields.human_read_p8) + ',' + '"' +
-                                     str(product.internal_reference) + '"' + '\n'}
+                                     str(product.default_code) + '"' + '\n'}
                             # TODO get value to print from qz.config
 
                             # text field Format: Ap1,p2,p3,p4,p5,p6,p7,"DATA"\n
@@ -71,7 +77,7 @@ class QzPrint(osv.osv):
                                       str(fields.font_p4) + ',' +
                                       str(fields.h_multiplier_p5) + ',' +
                                       str(fields.v_multiplier_p6) + ',' +
-                                      str(fields.n_r_p7) + ',' + '"' +
+                                      str(fields.n_r_p7) + ',' + '"' + 
                                       str(product.name_template) + '"' + '\n'}
                             # TODO get value to print from qz.config
 
@@ -91,8 +97,7 @@ class QzPrint(osv.osv):
 
     # Print EPL data
 
-    def send_epl_data(self, cr, uid, ids, active_ids, context=None):
-
+    def send_epl_data(self, cr, uid, ids, context=None):
         z = zebra()
         queue = self.get_queue(cr, uid, context=context)
         z.setqueue(queue)
@@ -106,12 +111,13 @@ class QzPrint(osv.osv):
                 height = [h, gap]
                 width = x.qz_label_width
         z.setup(direct_thermal=thermal, label_height=height, label_width=width)
-        epl = self.prepare_epl_data(cr, uid, ids, active_ids, context=context)
-        # copies
-        # TODO GET NUM OF COPIES to
-        z.output(epl)
-        ## sleep 0.9 sec between labels, if not, printer die ;)
-        sleep(0.9)
+        epl = self.prepare_epl_data(cr, uid, ids, context=context)
+        for data in self.browse(cr, uid, ids, context=context):
+            num_cop = data.copies
+        for n in range(0, num_cop):
+            z.output(epl)
+            ## sleep 0.9 sec between labels, if not, printer die ;)
+            sleep(0.9)
 
 
 QzPrint()
