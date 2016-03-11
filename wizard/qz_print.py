@@ -2,8 +2,7 @@
 from osv import fields, osv
 from zebra import zebra
 from time import sleep
-import re
-import codecs
+import unicodedata
 
 
 class QzPrint(osv.osv):
@@ -29,7 +28,6 @@ class QzPrint(osv.osv):
                 result = i.qz_printer.system_name
             return result
 
-
     # Prepare EPL data (escaped)
 
     def prepare_epl_data(self, cr, uid, ids, context=None):
@@ -40,7 +38,6 @@ class QzPrint(osv.osv):
         # TODO  Get field to print from qz.config
         product_obj = self.pool.get('product.product')
         record_ids = context and context.get('active_ids', []) or []
-
         for product in product_obj.browse(cr, uid, record_ids, context=context):
             ## Limit size:
 
@@ -80,8 +77,9 @@ class QzPrint(osv.osv):
                                       str(fields.font_p4) + ',' +
                                       str(fields.h_multiplier_p5) + ',' +
                                       str(fields.v_multiplier_p6) + ',' +
-                                      str(fields.n_r_p7) + ',' + '"' }
-                                      #str(product.name_template).encode('ascii', 'replace') + '"' + '\n'}
+                                      str(fields.n_r_p7) + ',',
+                                      unicodedata.normalize('NFKD', product.name_template).encode('ascii',
+                                                                                                  'ignore') + '"' + '\n'}
                             # TODO get value to print from qz.config
 
                 """
@@ -94,7 +92,7 @@ class QzPrint(osv.osv):
                     P1
                  """
 
-                result = '"""\n' + 'N\n' + ''.join(data) + '\n' + '\n' + 'P1\n"""'
+                result = '"""\n' + 'N\n' + ''.join(data) + '\n' + ''.join(data2) + '\n' + 'P1\n"""'
 
                 return result
 
@@ -123,5 +121,6 @@ class QzPrint(osv.osv):
             sleep(1.3)
 
         return True
+
 
 QzPrint()
