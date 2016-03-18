@@ -41,8 +41,8 @@ class QzPrint(osv.osv):
         for product in product_obj.browse(cr, uid, record_ids, context=context):
             ## Limit size:
 
-            if len(product.name_template) > 20:
-                product.name_template = product.name_template[:20] + '..'
+            if len(product.name_template) > 40:
+                product.name_template = product.name_template[:40] + '..'
             else:
                 product.name_template = product.name_template
 
@@ -77,7 +77,7 @@ class QzPrint(osv.osv):
                                       str(fields.font_p4) + ',' +
                                       str(fields.h_multiplier_p5) + ',' +
                                       str(fields.v_multiplier_p6) + ',' +
-                                      str(fields.n_r_p7) + ',',
+                                      str(fields.n_r_p7) + ',' + '"' +
                                       unicodedata.normalize('NFKD', product.name_template).encode('ascii',
                                                                                                   'ignore') + '"' + '\n'}
                             # TODO get value to print from qz.config
@@ -92,7 +92,7 @@ class QzPrint(osv.osv):
                     P1
                  """
 
-                result = '"""\n' + 'N\n' + ''.join(data) + '\n' + ''.join(data2) + '\n' + 'P1\n"""'
+                result = '"""\n' + 'N\n' + ''.join(data) + ''.join(data2) + 'P1\n"""'
 
                 return result
 
