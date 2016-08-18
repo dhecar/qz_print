@@ -8,7 +8,7 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                     <form string="Print/Labels configuration">
-                        <field name="name" />
+                        <field name="name"/>
                         <field name="qz_printer"/>
                         <field name="qz_default" />
                         <field name="qz_label_height"/>
@@ -54,12 +54,12 @@
                         <page string="Advance">
                             <group colspan="2" col="2">
                                 <button name="create_action" string="Add sidebar button" type="object" icon="gtk-execute"
-                                        colspan="2" attrs="{'invisible':[('ref_ir_act_report','!=',False)]}"
+                                        colspan="2" attrs="{'invisible':[('ref_ir_act_window','!=',False)]}"
                                         help="Display a button in the sidebar of related documents to open a composition wizard"/>
-                                <field name="ref_ir_act_report" attrs="{'invisible':[('ref_ir_act_report','=',False)]}"/>
-                                <field name="ref_ir_value" attrs="{'invisible':[('ref_ir_act_report','=',False)]}"/>
+                                <field name="ref_ir_act_window" attrs="{'invisible':[('ref_ir_act_window','=',False)]}"/>
+                                <field name="ref_ir_value" attrs="{'invisible':[('ref_ir_act_window','=',False)]}"/>
                                 <button name="unlink_action" string="Remove sidebar button" type="object" icon="gtk-delete"
-                                         attrs="{'invisible':[('ref_ir_act_report','=',False)]}" colspan="2" />
+                                         attrs="{'invisible':[('ref_ir_act_window','=',False)]}" colspan="2" />
                             </group>
                         </page>
                         </notebook>
@@ -92,6 +92,22 @@
 	        <field name="view_type">form</field>
 	        <field name="view_mode">tree,form</field>
         </record>
+
+
+      <!-- res.users epl printer-->
+    <record model="ir.ui.view" id="view_qz_printing_users_form">
+      <field name="name">res.users.qz.form.printing</field>
+      <field name="model">res.users</field>
+      <field name="inherit_id" ref="base.view_users_form" />
+      <field name="arch" type="xml">
+
+          <field name="printing_printer_id" position="after">
+                <field name="epl_printer_id" />
+            </field>
+
+
+      </field>
+    </record>
 
 
       <menuitem name= "Qz Print Config"
