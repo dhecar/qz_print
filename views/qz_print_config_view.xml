@@ -70,7 +70,6 @@
         </record>
 
 
-
         <record id="qz_print_window_tree" model="ir.ui.view">
             <field name="name">qz.config.tree</field>
             <field name="model">qz.config</field>
