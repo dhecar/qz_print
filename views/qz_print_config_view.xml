@@ -100,7 +100,7 @@
       <field name="inherit_id" ref="base.view_users_form" />
       <field name="arch" type="xml">
 
-          <field name="printing_printer_id" position="after">
+          <field name="printing_action" position="after">
                 <field name="epl_printer_id" />
             </field>
 
