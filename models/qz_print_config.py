@@ -3,6 +3,7 @@ from openerp.osv import orm, fields
 from openerp.tools.translate import _
 
 
+
 class QzConfig(orm.Model):
     _name = 'qz.config'
     _table = 'qz_config'
@@ -91,7 +92,7 @@ class QzConfig(orm.Model):
                 if template.ref_ir_value:
                     ir_values_obj.unlink(cr, uid, template.ref_ir_value.id, context)
             except Exception, e:
-                raise orm.except_osv(_("Warning"), _("Deletion of the action record failed. %s" % (e)))
+                raise orm.except_orm(_("Warning"), _("Deletion of the action record failed. %s" % (e)))
         return True
 
 

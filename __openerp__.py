@@ -29,8 +29,8 @@
     Need zebra python package https://pypi.python.org/pypi/zebra/
     """,
     "author": "David Hernández",
-    "depends": ['product', 'base_report_to_printer'],
-    "update_xml": ['views/qz_print_config_view.xml', 'views/product_view.xml'],
+    "depends": ['product', 'base_report_to_printer','stock'],
+    "update_xml": ['views/qz_print_config_view.xml', 'views/product_view.xml','views/in_print_view.xml'],
     "data": [],
     "installable": True,
     "auto_install": False,
