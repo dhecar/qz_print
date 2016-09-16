@@ -81,7 +81,7 @@ class stock_partial_picking(osv.osv):
                                      str(fields.h_multiplier_p5) + ',' +
                                      str(fields.v_multiplier_p6) + ',' +
                                      str(fields.n_r_p7) + ',' + '"' +
-                                     unicodedata.normalize('NFKD', print_field).encode('ascii',
+                                     unicodedata.normalize('NFKD', print_field.replace('"', '')).encode('ascii',
                                                                                        'ignore') + '"' + '\n'}
 
                             """
