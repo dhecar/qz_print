@@ -128,13 +128,13 @@ class stock_partial_picking(osv.osv):
             for n in range(0, num_cop):
                 z.output(epl)
                 ## sleep  between labels, if not, printer die ;)
-                sleep(1.3)
+                sleep(1.4)
 
             return True
 
     def do_partial_print(self, cr, uid, ids, context=None):
         res = super(stock_partial_picking, self).do_partial(cr, uid, ids, context=context)
-        # record_ids = context and context.get('active_ids', []) or []
+        record_ids = context and context.get('active_ids', []) or []
         partial = self.browse(cr, uid, ids[0], context=context)
 
         for wizard_line in partial.move_ids:

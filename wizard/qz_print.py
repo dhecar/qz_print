@@ -147,7 +147,7 @@ class QzPrint(osv.osv):
             for n in range(0, num_cop):
                 z.output(label)
                 ## sleep  between labels, if not, printer die ;)
-                sleep(1.2)
+                sleep(1.4)
 
         return True
 
